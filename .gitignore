@@ -1,0 +1,27 @@
+rm -f web/.gitignore
+
+cat << 'EOF' > .gitignore
+# Dependencies
+node_modules/
+
+# Environment & Secrets (Firebase / API)
+.env
+.env.*
+!.env.example
+*firebase-adminsdk*.json
+serviceAccountKey.json
+
+# Build & Logs
+dist/
+dist-ssr/
+*.local
+*.log
+npm-debug.log*
+*.timestamp-*-*.mjs
+
+# OS & Editors
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+EOF
