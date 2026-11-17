@@ -1,8 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import ClassesView from '../views/ClassesView.vue';
 
+// definim rutele aplicatiei
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
-})
+  routes: [
+    {
+      path: '/',
+      name: 'classes',
+      component: ClassesView
+    }
+  ]
+});
 
-export default router
+export default router;
