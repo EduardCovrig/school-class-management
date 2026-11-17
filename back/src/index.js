@@ -5,6 +5,9 @@ const cors = require('cors');
 // pornim conexiunea la firestore cand se deschide serverul
 require('./config/firestore');
 
+const classesRoutes = require('./routes/classes');
+const usersRoutes = require('./routes/users');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -21,6 +24,10 @@ app.use((req, res, next) => {
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
+
+// legam rutele pentru clase si utilizatori
+app.use('/api/classes', classesRoutes);
+app.use('/api/users', usersRoutes);
 
 // prindem orice eroare neasteptata ca sa nu pice aplicatia
 app.use((err, req, res, next) => {
