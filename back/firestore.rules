@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // blocam orice acces direct din browser (production mode)
+    // toate operatiile trec doar prin serverul nostru express
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
