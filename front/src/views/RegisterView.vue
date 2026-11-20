@@ -15,7 +15,7 @@ const classes = ref([]);
 const error = ref('');
 const loading = ref(false);
 
-// luam clasele din api pentru dropdown-ul de elevi
+// la incarcarea paginii aducem lista claselor din api pentru dropdown-ul de elevi
 onMounted(async () => {
   try {
     const res = await fetch('/api/classes');
@@ -27,7 +27,7 @@ onMounted(async () => {
   }
 });
 
-// validam formularul si cream contul
+// validam datele in frontend inainte sa apelam firebase auth si api-ul
 async function handleRegister() {
   error.value = '';
   if (fullName.value.trim().length < 3) {
@@ -113,6 +113,7 @@ async function handleRegister() {
           </select>
         </div>
 
+        <!-- dropdown-ul de clase apare doar daca userul alege rolul student -->
         <div v-if="role === 'student'">
           <label class="block text-sm font-medium text-slate-700 mb-1">Class</label>
           <select

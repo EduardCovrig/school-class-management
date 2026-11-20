@@ -11,7 +11,7 @@ const password = ref('');
 const error = ref('');
 const loading = ref(false);
 
-// trimitem datele de login catre firebase
+// validam campurile si trimitem cererea de login catre store-ul auth
 async function handleLogin() {
   error.value = '';
   if (!email.value || !password.value) {
@@ -22,6 +22,7 @@ async function handleLogin() {
   loading.value = true;
   try {
     await authStore.login(email.value, password.value);
+    // redirectionam in functie de rolul intors de api
     const target = authStore.profile?.role === 'teacher' ? '/teacher' : '/student';
     router.push(target);
   } catch (err) {

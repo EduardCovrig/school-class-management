@@ -10,14 +10,14 @@ const selectedClassId = ref('');
 const loading = ref(true);
 const error = ref('');
 
-// luam toate clasele din api
+// aducem toate clasele din api
 async function fetchClasses() {
   const res = await fetch('/api/classes');
   if (!res.ok) throw new Error('Failed to load classes');
   classes.value = await res.json();
 }
 
-// luam elevii, filtrati dupa clasa selectata daca exista una
+// aducem elevii din api trimitand token-ul jwt in header (ruta protejata pentru profesori)
 async function fetchStudents() {
   const url = selectedClassId.value
     ? `/api/users/students?classId=${selectedClassId.value}`
@@ -30,7 +30,7 @@ async function fetchStudents() {
   students.value = await res.json();
 }
 
-// cand dam click pe o clasa reincarcam lista de elevi
+// cand profesorul da click pe cardul unei clase filtram tabelul de elevi
 async function selectClass(classId) {
   selectedClassId.value = classId;
   try {
@@ -40,6 +40,7 @@ async function selectClass(classId) {
   }
 }
 
+// incarcam in paralel clasele si elevii cand se deschide pagina
 onMounted(async () => {
   try {
     await Promise.all([fetchClasses(), fetchStudents()]);
@@ -60,7 +61,7 @@ onMounted(async () => {
     <div v-if="loading" class="text-slate-500 text-sm">Loading data...</div>
 
     <template v-else>
-      <!-- sectiunea cu clasele afisate intr-un grid responsive -->
+      <!-- grid responsive cu toate clasele (1 coloana pe mobil, 2 pe tableta, 4 pe desktop) -->
       <section>
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-lg font-semibold text-slate-800">Classes ({{ classes.length }})</h2>
@@ -100,7 +101,7 @@ onMounted(async () => {
         </div>
       </section>
 
-      <!-- tabel responsive cu elevii -->
+      <!-- tabel responsive cu elevii din baza de date -->
       <section class="bg-white rounded-xl border border-slate-200 overflow-hidden">
         <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
           <h2 class="font-semibold text-slate-800">
