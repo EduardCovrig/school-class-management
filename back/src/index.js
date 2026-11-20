@@ -7,6 +7,8 @@ require('./config/firestore');
 
 const classesRoutes = require('./routes/classes');
 const usersRoutes = require('./routes/users');
+const assignmentsRoutes = require('./routes/assignments');
+const gradesRoutes = require('./routes/grades');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,9 +30,11 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-// legam rutele pentru clase si utilizatori la prefixele lor din api
+// legam toate grupurile de rute rest la prefixele lor din api
 app.use('/api/classes', classesRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/assignments', assignmentsRoutes);
+app.use('/api/grades', gradesRoutes);
 
 // middleware global pentru erori: prinde orice eroare trimisa cu next(err) din rute
 // ne asigura ca serverul nu crapa si raspunde mereu cu un json curat
