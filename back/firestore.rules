@@ -1,11 +1,14 @@
 rules_version = '2';
 
+//toata asta se aplica pentru cererile venite cu cheia publica firebaseConfig.
+//pentru rutele din backend, folosim pachetul firebase-admin si ne autentificam cu cheia privata din serviceAccountkey.json,
+//al carei path il ia din .env care nu ajunge pe github, deci SECURE
 service cloud.firestore {
-  match /databases/{database}/documents {
+  match /databases/{database}/documents { //database e un wildcard care ia id-ul bazein oastre de date automa
     // blocam orice acces direct din browser (production mode)
     // toate operatiile trec doar prin serverul nostru express
-    match /{document=**} {
-      allow read, write: if false;
+    match /{document=**} { //wildcard care inseamna absollut toate colectiile si documentele
+      allow read, write: if false; //if false e mereu ==0 => deci nu va fi niciodata allowed nici read nici write
     }
   }
 }
