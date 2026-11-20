@@ -1,5 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useAuthStore } from '../stores/auth';
+
+const authStore = useAuthStore();
 
 const classes = ref([]);
 const students = ref([]);
@@ -20,7 +24,9 @@ async function fetchStudents() {
     ? `/api/users/students?classId=${selectedClassId.value}`
     : '/api/users/students';
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${authStore.token}` }
+  });
   if (!res.ok) throw new Error('Failed to load students');
   students.value = await res.json();
 }
