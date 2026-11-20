@@ -8,13 +8,14 @@ import {
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
+// store pinia care tine starea globala a autentificarii in toata aplicatia
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null);
-  const profile = ref(null);
-  const token = ref(null);
-  const initialized = ref(false);
+  const user = ref(null); // obiectul user din firebase auth
+  const profile = ref(null); // datele profilului din firestore (fullName, role, class)
+  const token = ref(null); // token-ul jwt pe care il trimitem la fiecare cerere catre api
+  const initialized = ref(false); // ne spune daca am verificat sesiunea la incarcarea paginii
 
-  // cerem profilul din api-ul nostru folosind token-ul jwt
+  // cerem profilul userului din api-ul nostru express folosind token-ul jwt
   async function fetchProfile(idToken) {
     const res = await fetch('/api/users/me', {
       headers: { Authorization: `Bearer ${idToken}` }
@@ -26,7 +27,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  // asteptam sa vedem daca exista deja o sesiune activa la refresh
+  // se apeleaza in router guard la prima incarcare sau refresh
+  // asteapta raspunsul de la firebase ca sa nu redirectioneze prematur la /login
   function initAuth() {
     if (initialized.value) return Promise.resolve();
     return new Promise((resolve) => {
@@ -46,7 +48,7 @@ export const useAuthStore = defineStore('auth', () => {
     });
   }
 
-  // autentificare cu email si parola
+  // logare cu email si parola in firebase auth, apoi incarcam profilul din api
   async function login(email, password) {
     const cred = await signInWithEmailAndPassword(auth, email, password);
     user.value = cred.user;
@@ -54,7 +56,8 @@ export const useAuthStore = defineStore('auth', () => {
     await fetchProfile(token.value);
   }
 
-  // creare cont in firebase si salvare profil in firestore prin api
+  // pasul 1: cream contul in firebase auth
+  // pasul 2: trimitem rolul si clasa catre api-ul nostru sa le salveze in firestore
   async function register({ fullName, email, password, role, classId }) {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     user.value = cred.user;
@@ -76,7 +79,7 @@ export const useAuthStore = defineStore('auth', () => {
     profile.value = data;
   }
 
-  // delogare si curatare stare
+  // delogare din firebase si resetarea starii din pinia
   async function logout() {
     await signOut(auth);
     user.value = null;

@@ -1,7 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
-// configurarea aplicatiei web din firebase console
+// datele de configurare publice ale proiectului web din firebase console
+// frontend-ul foloseste firebase doar pentru login/register, nu acceseaza direct firestore
 const firebaseConfig = {
   apiKey: 'AIzaSyCqJiFju6SHn-lix6re1PjpzP-F_ntv-Sw',
   authDomain: 'school-class-management.firebaseapp.com',
@@ -11,6 +12,6 @@ const firebaseConfig = {
   appId: '1:869385069460:web:8bd105ebf9f6ea64446581'
 };
 
-// initializam firebase si serviciul de autentificare
+// initializam aplicatia firebase si exportam instanta auth pentru store-ul pinia
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

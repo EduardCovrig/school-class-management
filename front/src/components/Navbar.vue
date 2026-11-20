@@ -1,5 +1,5 @@
 <template>
-  <!-- bara de navigare reutilizabila in toata aplicatia -->
+  <!-- bara de navigare reutilizabila afisata in partea de sus a aplicatiei -->
   <header class="bg-white border-b border-slate-200 shadow-xs">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-3">
@@ -9,7 +9,7 @@
         </span>
       </div>
 
-      <!-- slot pentru butoanele din dreapta (ex: login sau logout mai tarziu) -->
+      <!-- slot-ul permite injectarea link-urilor si a butonului logout din App.vue -->
       <div class="flex items-center gap-3">
         <slot />
       </div>
